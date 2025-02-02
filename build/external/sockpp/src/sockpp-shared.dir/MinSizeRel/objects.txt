@@ -1,0 +1,8 @@
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/acceptor.obj
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/connector.obj
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/datagram_socket.obj
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/error.obj
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/inet_address.obj
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/inet6_address.obj
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/socket.obj
+C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/MinSizeRel/stream_socket.obj

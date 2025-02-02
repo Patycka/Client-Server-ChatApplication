@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\acceptor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\connector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\datagram_socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\error.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\inet_address.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\inet6_address.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\stream_socket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Korepetycje\C++\Projekty\Chat_application\external\sockpp\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{DA0E1443-3B7A-3A43-A08E-1EEC3C99D67E}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

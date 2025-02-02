@@ -1,0 +1,10 @@
+^C:\KOREPETYCJE\C++\PROJEKTY\CHAT_APPLICATION\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Korepetycje/C++/Projekty/Chat_application -BC:/Korepetycje/C++/Projekty/Chat_application/build --check-stamp-file C:/Korepetycje/C++/Projekty/Chat_application/build/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
