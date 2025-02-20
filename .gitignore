@@ -1,0 +1,8 @@
+*.cbp
+*.depend
+*.o
+*.exe
+*.layout
+*.txt
+*.vscode/
+build
