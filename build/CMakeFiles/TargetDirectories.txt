@@ -1,8 +1,0 @@
-C:/Korepetycje/C++/Projekty/Chat_application/build/CMakeFiles/server.dir
-C:/Korepetycje/C++/Projekty/Chat_application/build/CMakeFiles/INSTALL.dir
-C:/Korepetycje/C++/Projekty/Chat_application/build/CMakeFiles/ALL_BUILD.dir
-C:/Korepetycje/C++/Projekty/Chat_application/build/CMakeFiles/ZERO_CHECK.dir
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/CMakeFiles/INSTALL.dir
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/CMakeFiles/ALL_BUILD.dir
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/CMakeFiles/sockpp-shared.dir
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/CMakeFiles/INSTALL.dir

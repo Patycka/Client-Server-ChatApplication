@@ -1,8 +1,0 @@
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/acceptor.obj
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/connector.obj
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/datagram_socket.obj
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/error.obj
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/inet_address.obj
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/inet6_address.obj
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/socket.obj
-C:/Korepetycje/C++/Projekty/Chat_application/build/external/sockpp/src/sockpp-shared.dir/Release/stream_socket.obj
