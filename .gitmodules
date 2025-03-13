@@ -1,3 +1,0 @@
-[submodule "external/sockpp"]
-	path = external/sockpp
-	url = https://github.com/fpagliughi/sockpp
