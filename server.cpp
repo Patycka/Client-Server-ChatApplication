@@ -133,6 +133,7 @@ void clientHandler(std::shared_ptr<sockpp::tcp_socket> sock)
         ok = sock->write_n(message.c_str(), message.size());
     }
     // erase this socket from the list of clients
+    std::cout << "Connection closed from " << sock->peer_address() << std::endl;
     lock.lock();
     std::erase_if(clients, [&sock](const auto& peer){ return peer->peer_address() == sock->peer_address(); });
     SendClientList();
