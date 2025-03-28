@@ -50,6 +50,8 @@
 #include "sockpp/tcp_socket.h"
 #include "sockpp/version.h"
 #include "jsoncons/json.hpp"
+#include <syncstream>
+#include "logger.hpp"
 
 using namespace std;
 using namespace jsoncons;
@@ -57,6 +59,26 @@ using namespace jsoncons;
 std::vector<std::shared_ptr<sockpp::tcp_socket>> clients;
 std::mutex list_mutex;
 
+
+bool write_string(sockpp::tcp_socket& sock, const std::string& data) {
+    size_t total_written = 0;
+    size_t remaining = data.size();
+    const char* buffer = data.c_str();
+
+    while (total_written < data.size()) {
+        auto res = sock.write_n(buffer + total_written, remaining);
+        
+        if (!res) { // Error occurred
+            std::cerr << "Error writing to socket: " << res.error_message() << std::endl;
+            return false;
+        }
+        
+        total_written += res.value();
+        remaining -= res.value();
+    }
+    LOG("Sent: {} to {}", data, sock.peer_address().to_string());
+    return true;
+}
 
 void add_client(std::shared_ptr<sockpp::tcp_socket> client)
 {
@@ -103,8 +125,8 @@ void SendClientList()
     for (std::size_t i{0}; i < clients.size(); ++i) 
     {
         const auto& socket = clients[i];
-        const auto result = socket->write_n(message.c_str(), message.size());
-        if (result.is_error()) {
+        bool result = write_string(*socket, message);
+        if (!result) {
             clients.erase(clients.begin() + i);
             --i;
         }
@@ -125,33 +147,19 @@ void clientHandler(std::shared_ptr<sockpp::tcp_socket> sock)
     lock.unlock();
 
     // Ping this client to check if any client is disconnected
-    sockpp::result<std::size_t> ok;
-    while (!ok.is_error()) {
+    bool result = true;
+    while (result) {
         using namespace std::chrono_literals;
         std::this_thread::sleep_for(1s);
-        std::string message = "Is transmission ok?"; 
-        ok = sock->write_n(message.c_str(), message.size());
+        std::string message = "Is transmission ok?";
+        message = CreateLengthPrefixedMessage(message);
+        result = write_string(*sock, message);
     }
     // erase this socket from the list of clients
-    std::cout << "Connection closed from " << sock->peer_address() << std::endl;
+    LOG("Connection closed from  {}", sock->peer_address().to_string());
     lock.lock();
     std::erase_if(clients, [&sock](const auto& peer){ return peer->peer_address() == sock->peer_address(); });
     SendClientList();
-}
-
-// --------------------------------------------------------------------------
-// The thread function. This is run in a separate thread for each socket.
-// Ownership of the socket object is transferred to the thread, so when this
-// function exits, the socket is automatically closed.
-
-void run_echo(sockpp::tcp_socket sock) {
-    char buf[512];
-    sockpp::result<size_t> res;
-
-    while ((res = sock.read(buf, sizeof(buf))) && res.value() > 0)
-        sock.write_n(buf, res.value());
-
-    cout << "Connection closed from " << sock.peer_address() << endl;
 }
 
 // --------------------------------------------------------------------------
@@ -160,7 +168,7 @@ void run_echo(sockpp::tcp_socket sock) {
 // immediately wait for the next incoming connection.
 
 int main(int argc, char* argv[]) {
-    cout << "Sample TCP echo server for 'sockpp' " << sockpp::SOCKPP_VERSION << '\n' << endl;
+    LOG( "Sample TCP echo server for 'sockpp' {}", sockpp::SOCKPP_VERSION);
 
     in_port_t port = (argc > 1) ? atoi(argv[1]) : sockpp::TEST_PORT;
 
@@ -173,7 +181,7 @@ int main(int argc, char* argv[]) {
         cerr << "Error creating the acceptor: " << ec.message() << endl;
         return 1;
     }
-    cout << "Awaiting connections on port " << port << "..." << endl;
+    LOG( "Awaiting connections on port {} {}", port, "...");
 
     while (true) {
         sockpp::inet_address peer;
@@ -183,7 +191,7 @@ int main(int argc, char* argv[]) {
             cerr << "Error accepting incoming connection: " << res.error_message() << endl;
         }
         else {
-            cout << "Received a connection request from " << peer << endl;
+            LOG( "Received a connection request from {}", peer.to_string());
 
             // accepting code
             std::shared_ptr<sockpp::tcp_socket> socket{
