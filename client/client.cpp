@@ -1,6 +1,7 @@
 #include <syncstream>
 #include "sockpp/tcp_connector.h"
 #include "sockpp/tcp_socket.h"
+#include "sockpp/udp_socket.h"
 #include <thread>
 #include "jsoncons/json.hpp"
 
@@ -12,6 +13,9 @@ using namespace std;
 // receive udp messages from other clients (just to test different kind of protocol)
 // send udp message to other clients
 
+
+std::vectorsockpp::inet_address g_addresses;
+std::mutex g_addressesMutex;
 
 std::string readBytes(sockpp::tcp_socket& sock, size_t n) {
     std::string data(n, '\0'); // Pre-allocate space for n bytes
@@ -101,12 +105,55 @@ void receiveTcpMessages(sockpp::tcp_socket sock)
             for (const std::string& peer : vector) {
               addresses.push_back(splitIpPort(peer));
             }
-
+            std::unique_lock<std::mutex> lock{g_addressesMutex};
+            g_addresses = addresses;
+            lock.unlock();
         }
         std::osyncstream(std::cout) << "Message from server: " << message << std::endl;
         length.clear();
     }
 
+}
+
+void receive_udp_messages(sockpp::udp_socket& udp_sock) {
+    char buffer[1024];
+    sockpp::inet_address sender;
+
+    while (true) {
+        auto bytes_read = udp_sock.recv_from(buffer, sizeof(buffer) - 1, &sender);
+        // Sleep for 1 second
+        std::this_thread::sleep_for(1s);
+
+        if (bytes_read.is_ok() && bytes_read.value() != -1 ) {
+            buffer[bytes_read.value()] = '\0';
+            std::cout << "\n[UDP Message from " << sender.to_string() << "]: " << buffer << std::endl;
+            std::cout << "Enter message: ";
+            std::cout.flush();
+        }
+        
+    }
+}
+
+void send_udp_messages(sockpp::udp_socket& udp_sock) {
+    std::unique_lock<std::mutex> lock{g_addressesMutex};
+    std::vector<sockpp::inet_address> peers{g_addresses};
+    lock.unlock();
+
+    for (const sockpp::inet_address& address : peers) {
+      sockpp::udp_socket udpSendSocket{};
+      sockpp::inet_address peerAddress{address.address(), 12345};
+      sockpp::result<sockpp::none> connectResult{
+        udpSendSocket.connect(peerAddress)
+      };
+      if (!connectResult) {
+        // SAD
+      }
+    const std::string message{"Hello!"};
+    const sockpp::result<std::size_t> sendResult{udp_sock.send(message)};
+    if (!sendResult) {
+    // SAD
+    }
+  }
 }
 
 int main(int argc, char* argv[]) {
@@ -123,7 +170,11 @@ int main(int argc, char* argv[]) {
     error_code ec;
 
     sockpp::tcp_connector conn({host, port}, ec);
-    cout << "Sample TCP echo server for 'sockpp' " << sockpp::SOCKPP_VERSION << '\n' << endl;
+    sockpp::udp_socket udpSock;
+    sockpp::udp_socket udpSockSender;
+    if (udpSock.bind(sockpp::inet_address(port)).is_error()) {
+        std::osyncstream(std::cout) << "Could not bind to UDP port " << port << ":(\n";
+        }
 
     if (ec) {
         cerr << "Error connecting to server at " << sockpp::inet_address(host, port) << "\n\t"
@@ -131,8 +182,17 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+        
+    if (!udpSock) {
+        //std::cerr << "Error creating UDP socket: " << udpSock.last_error_str() << std::endl;
+        return 1;
+    }
 
     std::thread rdThr(receiveTcpMessages, std::move(conn));
+
+    // Start receiving UDP messages in a separate thread
+    std::thread recv_thread(receive_udp_messages, std::ref(udpSock));
+    recv_thread.detach();
 
     //conn.shutdown(SHUT_WR);
     rdThr.join();
