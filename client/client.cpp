@@ -14,7 +14,7 @@ using namespace std;
 // send udp message to other clients
 
 
-std::vectorsockpp::inet_address g_addresses;
+std::vector <sockpp::inet_address> g_addresses;
 std::mutex g_addressesMutex;
 
 std::string readBytes(sockpp::tcp_socket& sock, size_t n) {
