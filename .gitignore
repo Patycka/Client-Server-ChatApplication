@@ -3,6 +3,5 @@
 *.o
 *.exe
 *.layout
-*.txt
 *.vscode/
 build/
