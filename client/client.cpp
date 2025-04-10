@@ -153,7 +153,7 @@ void send_udp_messages(sockpp::udp_socket& udp_sock) {
     std::this_thread::sleep_for(10s);
 
     const std::string message{"Hello!"};
-    const sockpp::result<std::size_t> sendResult{udp_sock.send(message)};
+    const sockpp::result<std::size_t> sendResult{udpSendSocket.send(message)};
     if (!sendResult) {
         std::cerr << "Error sending message: " << sendResult.error_message() << std::endl;
     }
