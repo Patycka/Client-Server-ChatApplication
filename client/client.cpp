@@ -164,8 +164,20 @@ int main(int argc, char* argv[]) {
 
     cout << "Sample TCP echo client test for 'sockpp' "<< endl;
 
-    in_port_t port = (argc > 1) ? atoi(argv[1]) : sockpp::TEST_PORT;
-    string host = (argc > 1) ? argv[1] : "localhost";
+    // Parse command line arguments
+    constexpr int expectedArgc{3};
+    if (argc != expectedArgc) {
+    std::cout << std::format("Usage: {} --tcpServerAddress <ip_address>\n", argv[0]);
+    return EXIT_FAILURE;
+    }
+
+    const char* const tcpServerAddressArg{"--tcpServerAddress"};
+    if (std::strcmp(argv[1], tcpServerAddressArg) != 0) {
+    std::cout << std::format("Usage: {} --tcpServerAddress <ip_address>\n", argv[0]);
+    return EXIT_FAILURE;
+    }
+
+    const char* const tcpServerAddressTextr{argv[2]};
 
     sockpp::initialize();
     auto t_start = std::chrono::high_resolution_clock::now();
@@ -173,15 +185,15 @@ int main(int argc, char* argv[]) {
 
     error_code ec;
 
-    sockpp::tcp_connector conn({host, port}, ec);
+    sockpp::tcp_connector conn({tcpServerAddressTextr, sockpp::TEST_PORT}, ec);
     sockpp::udp_socket udpSock;
     sockpp::udp_socket udpSockSender;
-    if (udpSock.bind(sockpp::inet_address(port)).is_error()) {
-        std::osyncstream(std::cout) << "Could not bind to UDP port " << port << ":(\n";
+    if (udpSock.bind(sockpp::inet_address(sockpp::TEST_PORT)).is_error()) {
+        std::osyncstream(std::cout) << "Could not bind to UDP port " << sockpp::TEST_PORT << ":(\n";
         }
 
     if (ec) {
-        cerr << "Error connecting to server at " << sockpp::inet_address(host, port) << "\n\t"
+        cerr << "Error connecting to server at " << sockpp::inet_address(tcpServerAddressTextr, sockpp::TEST_PORT) << "\n\t"
              << ec.message() << endl;
         return 1;
     }
