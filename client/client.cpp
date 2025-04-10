@@ -149,7 +149,7 @@ void send_udp_messages(sockpp::udp_socket& udp_sock) {
         std::cerr << "Error connecting to peer: " << connectResult.error_message() << std::endl;
       }
 
-    // Sleep for 2 second
+    // Sleep for 10 second
     std::this_thread::sleep_for(10s);
 
     const std::string message{"Hello!"};
@@ -209,6 +209,10 @@ int main(int argc, char* argv[]) {
     // Start receiving UDP messages in a separate thread
     std::thread recv_thread(receive_udp_messages, std::ref(udpSock));
     recv_thread.detach();
+    while(1)
+    {
+        send_udp_messages(udpSockSender);
+    }
 
     //conn.shutdown(SHUT_WR);
     rdThr.join();
